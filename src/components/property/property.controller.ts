@@ -21,30 +21,27 @@ class PropertyController {
   ): Promise<void> {
     try {
       const property = req.body;
-      const geoURL = `http://api.positionstack.com/v1/forward?access_key=${process.env.GOE_ACCESS_KEY}&query=${property.address}`;
+      const geoURL=`https://api.geoapify.com/v1/geocode/search?text=${property.address}&apiKey=${process.env.GOE_ACCESS_KEY}`
+      // const geoURL = `http://api.positionstack.com/v1/forward?access_key=${process.env.GOE_ACCESS_KEY}&query=${property.address}`;
       const instance = axios.create({
         httpsAgent: new https.Agent({
           rejectUnauthorized: false,
         }),
       });
-      // We will store image given from frontend to aws s3 bucket or somewhere in cloud and it gives us url which we can store
-      // But as of now i am giving this url statically.
-      property.imageURL =
-        "https://fastly.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI";
       const addressLatandLong = await axios.get(geoURL);
 
-      property.lat = addressLatandLong.data.data[0]["latitude"];
-      property.long = addressLatandLong.data.data[0]["longitude"];
-
+      property.lat = addressLatandLong.data.features[0].geometry.coordinates[0];
+      property.long = addressLatandLong.data.features[0].geometry.coordinates[1];
       const propertyData = await createProperty(property);
       log.info("property created successfully");
       const response = SuccessResponse.apiSuccess({
         code: successCommonCode.CREATED_SUCCESSFULLY,
         data: propertyData,
-        description: "property set Successfully",
+        message: "property set Successfully",
       });
       res.status(response.statusCode).json(response);
     } catch (err) {
+      log.error(err);
       next(err);
     }
   }
@@ -72,24 +69,25 @@ class PropertyController {
       }
       if (filterPrams.type) {
         query.push({
-            $match: {
-              type: filterPrams.type,
-            },
-          });
+          $match: {
+            type: filterPrams.type,
+          },
+        });
       }
       if (filterPrams.price) {
         query.push({
-            $match: {
-              price: filterPrams.price,
-            },
-          });      }
+          $match: {
+            price: filterPrams.price,
+          },
+        });
+      }
       const propertyData = await getAllProperty(query);
 
       log.info("property fetched successfully");
       const response = SuccessResponse.apiSuccess({
         code: successCommonCode.FETCHED_SUCCESSFULLY,
         data: propertyData,
-        description: "property get Successfully",
+        message: "property get Successfully",
       });
       res.status(response.statusCode).json(response);
     } catch (err) {

@@ -1,12 +1,7 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { Document, Model, model, Schema } from 'mongoose';
-import Config from '../../config';
-import { getLogger } from '../../services/logger';
+import { Document, Model, model, Schema } from "mongoose";
+import { getLogger } from "../../services/logger";
 
-const { jwtAuthentication } = Config;
-
-const MODULE_NAME_FOR_LOG = 'property.model';
+const MODULE_NAME_FOR_LOG = "property.model";
 const log = getLogger(MODULE_NAME_FOR_LOG);
 
 /**
@@ -16,20 +11,20 @@ const log = getLogger(MODULE_NAME_FOR_LOG);
  */
 
 export interface IPropertyDocument extends Document {
-    name: string;
-    type: string;
-    price: string;
-    imageURL: string;
-    address:  string;
-    lat:string;
-    long:string;
+  createdByName: string;
+  createdContactNumber: string;
+  name: string;
+  type: string;
+  price: string;
+  imageURL: string;
+  address: string;
+  lat: string;
+  long: string;
 }
 
-export interface IProperty extends IPropertyDocument {
-}
+export interface IProperty extends IPropertyDocument {}
 
-export interface IPropertyModel extends Model<IProperty> {
-}
+export interface IPropertyModel extends Model<IProperty> {}
 
 /**
  * --------------------------------
@@ -38,20 +33,25 @@ export interface IPropertyModel extends Model<IProperty> {
  */
 
 export const propertySchema: Schema<IPropertyDocument> = new Schema(
-    {
-        name: Schema.Types.String,
-        type: Schema.Types.String,
-        price:Schema.Types.String,
-        imageURL: Schema.Types.String,
-        address: Schema.Types.String,
-        lat: Schema.Types.String,
-        long: Schema.Types.String,
-    },
-    {
-        timestamps: true,
-    },
+  {
+    createdByName: Schema.Types.String,
+    createdContactNumber: Schema.Types.String,
+    name: Schema.Types.String,
+    type: Schema.Types.String,
+    price: Schema.Types.String,
+    imageURL: Schema.Types.String,
+    address: Schema.Types.String,
+    lat: Schema.Types.String,
+    long: Schema.Types.String,
+  },
+  {
+    timestamps: true,
+  }
 );
 propertySchema.index({ name: 1 });
-export const Property: IPropertyModel = model<IProperty, IPropertyModel>('property', propertySchema);
+export const Property: IPropertyModel = model<IProperty, IPropertyModel>(
+  "property",
+  propertySchema
+);
 
 export default Property;

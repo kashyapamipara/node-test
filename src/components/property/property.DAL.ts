@@ -1,3 +1,4 @@
+import { pipeline } from "stream";
 import { getLogger } from "../../services/logger";
 import HttpException, { ERROR_CONST } from "../../utils/error-utils";
 import { PROPERTY_ERROR_CODES } from "./property.errors";
@@ -22,16 +23,13 @@ export const createProperty = async (
       moduleName: MODULE_NAME_FOR_LOG,
     });
   }
-
-}
-  /** Create new user doc in database
+};
+/** Create new user doc in database
  */
-export const getAllProperty = async (
-  query
-): Promise<IProperty[] | never> => {
+export const getAllProperty = async (query): Promise<IProperty[] | never> => {
   try {
-    console.log('&&&&&', query)
-    return await Property.aggregate(query);
+    if (query.length) return await Property.aggregate(query);
+    return await Property.find();
   } catch (err) {
     throw new HttpException({
       errorType: ERROR_CONST.DATABASE_ERROR,

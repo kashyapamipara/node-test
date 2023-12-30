@@ -11,28 +11,28 @@ export class SuccessResponse {
 
     public data;
 
-    public description: string;
+    public message: string;
 
-    constructor(public successCode: string, data?: any, description?: string, public statusCode: number = 200) {
+    constructor(public successCode: string, data?: any, message?: string, public statusCode: number = 200) {
         if (data) {
             this.data = data;
         }
-        if (description) {
-            this.description = description;
+        if (message) {
+            this.message = message;
         }
     }
 
     static apiSuccess({
         code,
         data,
-        description,
+        message,
         statusCode,
     }: {
         code: string;
         data?: any;
-        description?: string;
+        message?: string;
         statusCode?: number;
     }): SuccessResponse {
-        return new SuccessResponse(code, data, description, statusCode);
+        return new SuccessResponse(code, data, message, statusCode);
     }
 }
