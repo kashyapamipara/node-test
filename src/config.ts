@@ -24,14 +24,7 @@ export const Config = {
             algorithm: 'RS256',
         },
     },
-    razorpay: {
-        keyId: process.env.RAZORPAY_KEY,
-        keySecret: process.env.RAZORPAY_KEY_SECRET,
-        url: 'https://api.razorpay.com/v1',
-        webhook: 'https://ikit.chatomate.in/saas/workflow/bot/635a79107a7fd9e3a5c43652',
-        webhookToken: process.env.WEBHOOK_UPDATE_TOKEN,
-        checkpointToken: process.env.CHECKPOINT_UPDATE_TOKEN,
-    },
+
     checkPointUpdateWebhook: process.env.CHECKPOINT_UPDATE_WEBHOOK,
 };
 
