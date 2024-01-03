@@ -24,8 +24,6 @@ export const Config = {
             algorithm: 'RS256',
         },
     },
-
-    checkPointUpdateWebhook: process.env.CHECKPOINT_UPDATE_WEBHOOK,
 };
 
 export default Config;
